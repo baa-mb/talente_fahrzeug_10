@@ -4,35 +4,31 @@ input.onButtonPressed(Button.A, function () {
 serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
     let wert = 0
     let info = ""
+    serial.writeString(info)
     if (info == "roll") {
         // basic.showNumber(wert)
         rawSeit = Math.max(-45, Math.min(45, wert))
-        mappedSeit = Math.map(rawSeit, -45, 45, -100, 100)
+        mappedSeit = Math.map(rawSeit, -45, 45, -255, 255)
         // basic.showNumber(mappedSeit)
         seitLeft = mappedSeit
         seitRight = mappedSeit * -1
     }
     if (info == "pitch") {
         rawPitch = Math.max(-45, Math.min(45, wert))
-        mappedPitch = Math.map(rawPitch, -45, 45, -100, 100)
+        mappedPitch = Math.map(rawPitch, -45, 45, -255, 255)
         pitchLeft = mappedPitch
         pitchRight = mappedPitch
     }
     leftOutput = (pitchLeft + seitLeft) / 2
     rightOutput = (pitchRight + seitRight) / 2
     if (rawPitch == 0 && rawSeit == 0) {
-        kitronik.motorOff(kitronik.Motors.Motor1)
-kitronik.motorOff(kitronik.Motors.Motor2)
+        robotbit.MotorStopAll()
     } else {
         if (leftOutput < 0) {
-            kitronik.motorOn(kitronik.Motors.Motor1, kitronik.MotorDirection.Reverse, Math.abs(leftOutput))
-        } else {
-            kitronik.motorOn(kitronik.Motors.Motor1, kitronik.MotorDirection.Forward, leftOutput)
+            robotbit.MotorRun(robotbit.Motors.M1A, leftOutput)
         }
         if (rightOutput < 0) {
-            kitronik.motorOn(kitronik.Motors.Motor2, kitronik.MotorDirection.Reverse, Math.abs(rightOutput))
-        } else {
-            kitronik.motorOn(kitronik.Motors.Motor2, kitronik.MotorDirection.Forward, rightOutput)
+            robotbit.MotorRun(robotbit.Motors.M1B, rightOutput)
         }
     }
     if (info == "TB") {
@@ -68,3 +64,4 @@ let Platzhalter = 0
 radio.setGroup(3)
 lauf_flag = 0
 basic.showIcon(IconNames.Diamond)
+robotbit.MotorStopAll()
