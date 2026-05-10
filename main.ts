@@ -47,6 +47,8 @@ serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
 })
 input.onButtonPressed(Button.B, function () {
     lauf_flag = 0
+    robotbit.MotorRun(robotbit.Motors.M1A, 106)
+    robotbit.MotorRun(robotbit.Motors.M1B, 106)
 })
 let pitchRight = 0
 let pitchLeft = 0
